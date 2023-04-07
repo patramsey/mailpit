@@ -92,6 +92,12 @@ var (
 
 	// RepoBinaryName on Github for updater
 	RepoBinaryName = "mailpit"
+
+	//SMTPRelayServer server to relay or release emails to in socket format
+	SMTPRelayServer string
+
+	//SMTPRelayAllEmails relay all emails recieved to SMTPRelayServer
+	SMTPRelayAllEmails bool
 )
 
 // Tag struct
@@ -142,6 +148,10 @@ func VerifyConfig() error {
 
 	if SMTPTLSCert != "" && SMTPTLSKey == "" || SMTPTLSCert == "" && SMTPTLSKey != "" {
 		return errors.New("You must provide both an SMTP TLS certificate and a key")
+	}
+
+	if SMTPRelayAllEmails && SMTPRelayServer == "" {
+		return errors.New("You must provide an SMTP Relay Server when trying to relay all emails")
 	}
 
 	if SMTPTLSCert != "" {
