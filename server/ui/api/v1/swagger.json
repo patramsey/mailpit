@@ -582,14 +582,6 @@
             "$ref": "#/definitions/Attachment"
           }
         },
-        "Raw": {
-          "description": "Raw Representation of email",
-          "type": "array",
-          "items": {
-            "type": "integer",
-            "format": "uint8"
-          }
-        },
         "Read": {
           "description": "Read status",
           "type": "boolean"

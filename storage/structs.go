@@ -41,8 +41,6 @@ type Message struct {
 	Inline []Attachment
 	// Message attachments
 	Attachments []Attachment
-	//Raw Representation of email
-	Raw []byte
 }
 
 // Attachment struct for inline and attachments

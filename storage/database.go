@@ -447,7 +447,6 @@ func GetMessage(id string) (*Message, error) {
 		Tags:    getMessageTags(id),
 		Size:    len(raw),
 		Text:    env.Text,
-		Raw:     raw,
 	}
 
 	// strip base tags

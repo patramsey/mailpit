@@ -283,22 +283,6 @@ export default {
 			});
 		},
 
-		// universal handler to delete current or selected messages
-		releaseMessage: function () {
-			let id = null;
-			let self = this;
-			if (self.message) {
-				id = self.message.ID;
-			} else {
-				return false;
-			}
-
-			let uri = 'api/v1/messagea/'+id+ '/release';
-			self.get(uri, false, function (response) {
-				console.log(response);
-			});
-		},
-
 		deleteAll: function () {
 			let self = this;
 			let uri = 'api/v1/messages';
@@ -591,9 +575,6 @@ export default {
 			<button class="btn btn-outline-light me-2" title="Delete message" v-on:click="deleteMessages">
 				<i class="bi bi-trash-fill"></i> <span class="d-none d-md-inline">Delete</span>
 			</button>
-			<button class="btn btn-outline-light me-2" title="Release message" v-on:click="releaseMessage">
-				<i class="bi bi-envelope-paper-fill"></i> <span class="d-none d-md-inline">Release</span>
-			</button>
 			<a class="btn btn-outline-light float-end" :class="messageNext ? '' : 'disabled'" :href="'#' + messageNext"
 				title="View next message">
 				<i class="bi bi-caret-right-fill"></i>
@@ -755,10 +736,6 @@ export default {
 					<button class="list-group-item list-group-item-action" v-on:click="deleteMessages">
 						<i class="bi bi-trash-fill me-1 text-danger"></i>
 						Delete
-					</button>
-					<button class="list-group-item list-group-item-action" v-on:click="releaseMessage">
-						<i class="bi bi-envelope-paper-fill text-danger"></i>
-						Release
 					</button>
 					<button class="list-group-item list-group-item-action" v-on:click="selected = []">
 						<i class="bi bi-x-circle me-1"></i>

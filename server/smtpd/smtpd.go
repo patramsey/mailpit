@@ -5,7 +5,6 @@ import (
 	"bytes"
 	"net"
 	"net/mail"
-	"net/smtp"
 	"regexp"
 	"strings"
 
@@ -37,14 +36,6 @@ func mailHandler(origin net.Addr, from string, to []string, data []byte) error {
 
 	subject := msg.Header.Get("Subject")
 	logger.Log().Debugf("[smtp] received (%s) from:%s to:%s subject:%q", cleanIP(origin), from, to[0], subject)
-
-	if config.SMTPRelayAllEmails {
-		err = smtp.SendMail(config.SMTPRelayServer, nil, from, to, data)
-		if err != nil {
-			logger.Log().Errorf("[smtp] error relaying email (%s) ", err)
-		}
-	}
-
 	return nil
 }
 
