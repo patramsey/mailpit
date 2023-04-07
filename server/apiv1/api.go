@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"net/http"
 	"net/mail"
+	"net/smtp"
 	"strconv"
 	"strings"
 
 	"github.com/axllent/mailpit/config"
 	"github.com/axllent/mailpit/storage"
+	"github.com/axllent/mailpit/utils/logger"
 	"github.com/gorilla/mux"
 )
 
@@ -305,6 +307,53 @@ func DownloadRaw(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Disposition", "attachment; filename=\""+id+".eml\"")
 	}
 	_, _ = w.Write(data)
+}
+
+// ReleaseMessage (method: GET) will release a message to the relay server
+func ReleaseMessage(w http.ResponseWriter, r *http.Request) {
+	// swagger:route GET /api/v1/message/{ID}/release
+	//
+	// # Get releases message to relay server
+	//
+	// Releases the message to the designated SMTP Server.
+	//
+	//	Produces:
+	//	- text/plain
+	//
+	//	Schemes: http, https
+	//
+	//	Parameters:
+	//	  + name: ID
+	//	    in: path
+	//	    description: message id
+	//	    required: true
+	//	    type: string
+	//
+	//	Responses:
+	//		200: OKResponse
+	//		default: ErrorResponse
+
+	vars := mux.Vars(r)
+
+	id := vars["id"]
+
+	msg, err := storage.GetMessage(id)
+	if err != nil {
+		fourOFour(w)
+		return
+	}
+	var tos []string
+	for _, t := range msg.To {
+		tos = append(tos, t.Address)
+	}
+
+	err = smtp.SendMail(config.SMTPRelayServer, nil, msg.From.Address, tos, msg.Raw)
+	if err != nil {
+		logger.Log().Errorf("[smtp] error relaying email (%s) ", err)
+	}
+
+	w.Header().Add("Content-Type", "text/plain")
+	_, _ = w.Write([]byte("ok"))
 }
 
 // DeleteMessages (method: DELETE) deletes all messages matching IDS.

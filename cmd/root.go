@@ -101,6 +101,9 @@ func init() {
 	rootCmd.Flags().BoolVarP(&config.QuietLogging, "quiet", "q", config.QuietLogging, "Quiet logging (errors only)")
 	rootCmd.Flags().BoolVarP(&config.VerboseLogging, "verbose", "v", config.VerboseLogging, "Verbose logging")
 
+	rootCmd.Flags().StringVar(&config.SMTPRelayServer, "stmp-relay-server", config.SMTPRelayServer, "A server to relay emails to")
+	rootCmd.Flags().BoolVar(&config.SMTPRelayAllEmails, "smtp-relay-all-emails", config.SMTPRelayAllEmails, "Relays all emails recieved to relay server - requires stmp-relay-server")
+
 	// deprecated flags 2022/08/06
 	rootCmd.Flags().StringVarP(&config.UIAuthFile, "auth-file", "a", config.UIAuthFile, "A password file for web UI authentication")
 	rootCmd.Flags().StringVar(&config.UITLSCert, "ssl-cert", config.UITLSCert, "SSL certificate - requires ssl-key")
